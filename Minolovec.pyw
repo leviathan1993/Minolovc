@@ -7,9 +7,6 @@ else:
     from tkinter import *
     from tkinter import messagebox
 import random
-import os.path
-from functools import partial
-from collections import deque
 import time
 
 
@@ -59,14 +56,14 @@ class Minesweeper():
             for stolpec in range(self.st_stolpcev):
                 self.buttons[vrstica][stolpec].gumb.destroy()
         self.buttons=None
-         
+
     def nova_igra(self):
 ##        if self.igra:
 ##            self.izbrane_mine = None
 ##            gumb = None
 ##            self.zbrisi_polje()
         #Uporabi podatke iz okna nastavitve
-       
+
 
         self.mines=self.mines1234
         self.st_vrstic = self.st_vrstic1234
@@ -121,7 +118,7 @@ class Minesweeper():
             if self.buttons[v][s].mina == 1: m += 1
         return m
 
-    def lclick(self, vrstica, stolpec):       
+    def lclick(self, vrstica, stolpec, preveri_konec=True):
         a = self.st_poklikanih == self.st_vrstic*self.st_stolpcev
         if a: self.t1 = time.time()
 
@@ -151,10 +148,10 @@ class Minesweeper():
                 if m == 0:
                     # print ("odpiramo sosede od {0}".format((vrstica,stolpec)))
                     for (v, s) in self.sosedi(vrstica, stolpec):
-                        self.lclick(v, s)
+                        self.lclick(v, s, preveri_konec=False)
 
         # ali je konec igre?
-        if self.st_poklikanih-self.mines == 0:
+        if preveri_konec and self.st_poklikanih-self.mines == 0:
             self.konec_igre(True)
 
     def rclick(self, vrstica, stolpec):
@@ -170,7 +167,7 @@ class Minesweeper():
                 self.mines += 1
             self.st_poklikanih += 1
             sez.gumb.config(bg="green", text="")
-            
+
         if self.st_poklikanih == 0 and self.mines == 0:
             self.konec_igre(True)
 
@@ -227,7 +224,7 @@ class Nastavitve():
         b.pack()
 
     def callback(self):
-        self.minesweeper.st_vrstic1234 = int(self.e1.get()) 
+        self.minesweeper.st_vrstic1234 = int(self.e1.get())
         self.minesweeper.st_stolpcev1234 = int(self.e2.get())
         self.minesweeper.mines1234 = max(int(0.1*self.minesweeper.st_stolpcev1234*self.minesweeper.st_vrstic1234),min(int(self.e3.get()),self.minesweeper.st_stolpcev1234*self.minesweeper.st_vrstic1234)) #Število min ne sme biti večje od velikosti igralnega polja, vsaj 10% min.
 
@@ -258,5 +255,5 @@ class Timer:
 
 root = Tk()
 root.title('Minolovec')
-minesweeper = Minesweeper(root,10,10,1)
+minesweeper = Minesweeper(root,10,10,10)
 root.mainloop()
