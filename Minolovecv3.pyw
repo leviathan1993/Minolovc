@@ -131,10 +131,7 @@ class Minesweeper():
             self.label2.grid(row=0, column=0, columnspan=10, sticky = N + S + E +W)
 
             
-            self.label2.grid(row = 0, column = 0, columnspan = 10)
-
-    ##        self.label3 = Label(frame, text = "Flags: "+str(self.flags))
-    ##        self.label3.grid(row = 11, column = 4, columnspan = 5)
+##            self.label2.grid(row = 0, column = 0, columnspan = 10)
 
         
         frame.grid(row=1, column=0, sticky = N + S + E + W) if self.POKAZI else frame.grid(row=0, column=0, sticky = N + S + E + W)
@@ -194,7 +191,7 @@ class Minesweeper():
                 sez.mina=0
                 self.mines-=1
                 m = sez.sosedi  # stevilo sosednjih min
-                if m != 0 and sys.platform != "darwin":
+                if m != 0 or sys.platform =="darwin":
                     if self.vidne_st == False:
                         sez.gumb.config(text=str(m))
                     else:
@@ -211,7 +208,7 @@ class Minesweeper():
             else:
                 # polje je bilo prazno
                 m = sez.sosedi  # stevilo sosednjih min
-                if m != 0 and sys.platform != "darwin":
+                if m != 0 or sys.platform == "darwin":
                     if self.vidne_st == False:
                         sez.gumb.config(text=str(m))
                     else:
@@ -230,7 +227,7 @@ class Minesweeper():
     def rclick(self, vrstica, stolpec):
         sez = self.buttons[vrstica][stolpec]
         if sez.gumb["bg"] == "green":
-            sez.gumb.config(bg="blue", text=chr(9873) if sys.version_info[0] == 3 else ':)')
+            sez.gumb.config(bg="blue", text=chr(9873) if sys.version_info[0] == 3 and TkVersion >= 8.6 else ':)')
             self.st_poklikanih -= 1
             if sez.mina == 1:
                 self.mines -= 1
